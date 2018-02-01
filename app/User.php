@@ -3,19 +3,22 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Tymon\JWTAuth\Providers\User\EloquentUserAdapter;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends EloquentUserAdapter implements
-    AuthorizableContract,
-    CanResetPasswordContract
+class User extends Authenticatable implements JWTSubject
 {
-    use Authorizable;
-    use CanResetPassword;
     use Notifiable;
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +40,6 @@ class User extends EloquentUserAdapter implements
 
 
     public function toDos(){
-        return $this->user->hasMany('App\ToDo');
+        return $this->hasMany('App\ToDo');
     }
 }

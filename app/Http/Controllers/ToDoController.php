@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\ToDo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ToDoController extends Controller
 {
@@ -14,17 +15,8 @@ class ToDoController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $user = Auth::user();
+        return $user->toDos;
     }
 
     /**
@@ -35,29 +27,13 @@ class ToDoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\ToDo  $toDo
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ToDo $toDo)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ToDo  $toDo
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ToDo $toDo)
-    {
-        //
+        $data = $request->validate([
+            'text' => 'required',
+            'checked' => 'required|boolean'
+        ]);
+        $user = Auth::user();
+        $toDo = $user->toDos()->create($data);
+        return $toDo;
     }
 
     /**
@@ -69,7 +45,11 @@ class ToDoController extends Controller
      */
     public function update(Request $request, ToDo $toDo)
     {
-        //
+        $data = $request->validate([
+            'text' => 'required',
+            'checked' => 'required|boolean'
+        ]);
+        $toDo->fill($data)->save();
     }
 
     /**
@@ -80,6 +60,6 @@ class ToDoController extends Controller
      */
     public function destroy(ToDo $toDo)
     {
-        //
+        $toDo->delete();
     }
 }
