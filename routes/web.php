@@ -17,4 +17,6 @@
 
 //Auth::routes();
 
-//Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', function (){
+    return response('Unauthorized', 401);
+})->name('login');

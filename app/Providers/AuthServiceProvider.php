@@ -3,10 +3,8 @@
 namespace App\Providers;
 
 use App\Policies\ToDoPolicy;
-use App\ToDo;
-use Illuminate\Support\Facades\Auth;
+use App\Todo;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Tymon\JWTAuth\JWTGuard;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -17,7 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
-        ToDO::class => ToDOPolicy::class,
+//        ToDO::class => ToDOPolicy::class,
     ];
 
     /**

@@ -4,29 +4,29 @@ namespace App\Policies;
 
 use App\Permission;
 use App\User;
-use App\ToDo;
+use App\Todo;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class ToDoPolicy
+class TodoPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view the ToDo.
+     * Determine whether the user can view the Todo.
      *
      * @param  \App\User  $user
-     * @param  \App\ToDo  $toDo
+     * @param  \App\Todo  $todo
      * @return mixed
      */
-    public function view(User $user, ToDo $toDo)
+    public function view(User $user, Todo $todo)
     {
-        if($user->id == $toDo->user_id) {
+        if($user->id == $todo->user_id) {
             return true;
         } else {
             try {
                 Permission::where([
-                    ['owner_id', $toDo->user_id],
+                    ['owner_id', $todo->user_id],
                     ['receiver_id', $user->id]
                 ])->firstOrFail();
             } catch (ModelNotFoundException $e) {
@@ -37,7 +37,7 @@ class ToDoPolicy
     }
 
     /**
-     * Determine whether the user can create ToDos in the owner's list
+     * Determine whether the user can create Todos in the owner's list
      *
      * @param  \App\User  $user
      * @param  \App\User  $owner
@@ -61,25 +61,25 @@ class ToDoPolicy
     }
 
     /**
-     * Determine whether the user can update the ToDo.
+     * Determine whether the user can update the Todo.
      *
      * @param  \App\User  $user
-     * @param  \App\ToDo  $toDo
+     * @param  \App\Todo  $todo
      * @return mixed
      */
-    public function update(User $user, ToDo $toDo)
+    public function update(User $user, Todo $todo)
     {
         //
     }
 
     /**
-     * Determine whether the user can delete the ToDo.
+     * Determine whether the user can delete the Todo.
      *
      * @param  \App\User  $user
-     * @param  \App\ToDo  $toDo
+     * @param  \App\Todo  $todo
      * @return mixed
      */
-    public function delete(User $user, ToDo $toDo)
+    public function delete(User $user, Todo $todo)
     {
         //
     }

@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ToDo extends Model
+class Todo extends Model
 {
-    public $guarded = [];
+    public $guarded = ['user_id'];
 
     public function user()
     {

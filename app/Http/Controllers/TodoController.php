@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\ToDo;
+use App\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ToDoController extends Controller
+class TodoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class ToDoController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return $user->toDos;
+        return $user->todos;
     }
 
     /**
@@ -32,34 +32,39 @@ class ToDoController extends Controller
             'checked' => 'required|boolean'
         ]);
         $user = Auth::user();
-        $toDo = $user->toDos()->create($data);
-        return $toDo;
+        $todo = $user->todos()->create($data);
+        return response()->json($todo);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ToDo  $toDo
+     * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ToDo $toDo)
+    public function update(Request $request, Todo $todo)
     {
         $data = $request->validate([
             'text' => 'required',
             'checked' => 'required|boolean'
         ]);
-        $toDo->fill($data)->save();
+        $todo->text = $data['text'];
+        $todo->checked = $data['checked'];
+
+        $todo->save();
+        return response()->json($todo);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ToDo  $toDo
+     * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ToDo $toDo)
+    public function destroy(Todo $todo)
     {
-        $toDo->delete();
+        $todo->delete();
+        return response('success');
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
-    public $guarded = [];
+    public $guarded = ['owner_id', 'receiver_id'];
 
     public function owner()
     {

@@ -39,7 +39,17 @@ class User extends Authenticatable implements JWTSubject
     ];
 
 
-    public function toDos(){
-        return $this->hasMany('App\ToDo');
+    public function todos(){
+        return $this->hasMany('App\Todo');
+    }
+
+
+    public function shared(){
+        return $this->hasMany('App\Permission', 'owner_id');
+    }
+
+
+    public function available(){
+        return $this->hasMany('App\Permission', 'receiver_id');
     }
 }
