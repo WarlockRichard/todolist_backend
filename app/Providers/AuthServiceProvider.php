@@ -3,8 +3,12 @@
 namespace App\Providers;
 
 use App\Policies\ToDoPolicy;
+use App\Policies\UserTodosPolicy;
 use App\Todo;
+use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -14,8 +18,9 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
-//        ToDO::class => ToDOPolicy::class,
+//        'App\Model' => 'App\Policies\ModelPolicy',
+        ToDO::class => ToDOPolicy::class,
+        User::class => UserTodosPolicy::class,
     ];
 
     /**
@@ -27,5 +32,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+//        Gate::define('index', 'UserTodosPolicy@view');
+//        Gate::define('modify', 'UserTodosPolicy@modify');
     }
 }

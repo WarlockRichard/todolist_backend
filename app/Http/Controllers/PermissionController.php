@@ -36,8 +36,10 @@ class PermissionController extends Controller
             'can_write' => 'required|boolean'
         ]);
         $user = Auth::user();
+        if($user->name === $data['receiver_name']){
+            return response('Trying to give permission yourself', 400);
+        }
         $receiver = User::where('name', $data['receiver_name'])->firstOrFail();
-
         try{
             $permission = $user->shared()->create(['receiver_id' => $receiver->id, 'can_write' => $data['can_write']]);
             return response()->json($permission);

@@ -11,12 +11,12 @@ class UserTodosController extends Controller
     /**
      * Display a listing of the given User's todos.
      *
-     * @param mixed $user_id
+     * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function index($user_id)
+    public function index(User $user)
     {
-        $user = User::findOrFail($user_id);
+        $this->authorize('listTodo', $user);
         return response()->json($user->todos);
     }
 
@@ -24,13 +24,12 @@ class UserTodosController extends Controller
      * Store a newly created Todo for User in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param $user_id
+     * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $user_id)
+    public function store(Request $request, User $user)
     {
-        $user = User::findOrFail($user_id);
-
+        $this->authorize('writeTodo', $user);
         $data = $request->validate([
             'text' => 'required',
             'checked' => 'required|boolean'
@@ -40,52 +39,18 @@ class UserTodosController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param $user_id
-     * @param $todo_id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $user_id, $todo_id)
-    {
-        $todo = Todo::findOrFail($todo_id);
-        $data = $request->validate([
-            'text' => 'required',
-            'checked' => 'required|boolean'
-        ]);
-        $todo->text = $data['text'];
-        $todo->checked = $data['checked'];
-
-        $todo->save();
-        return response()->json($todo);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param $todo_id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($user_id, $todo_id)
-    {
-        $todo = Todo::findOrFail($todo_id);
-        $todo->delete();
-        return response('success');
-    }
-
-    /**
      * Set all User's todo's checked field in storage.
      *
-     * @param $user_id
+     * @param Request $request
+     * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function updateAll(Request $request, $user_id)
+    public function updateAll(Request $request, User $user)
     {
+        $this->authorize('writeTodo', $user);
         $data = $request->validate([
             'checked' => 'required|boolean'
         ]);
-        $user = User::findOrFail($user_id);
         $user->todos()->update(['checked' => $data['checked']]);
 
         return response('success');
@@ -94,12 +59,12 @@ class UserTodosController extends Controller
     /**
      * Remove all User's completed todos from storage.
      *
-     * @param $user_id
+     * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroyCompleted($user_id)
+    public function destroyCompleted(User $user)
     {
-        $user = User::findOrFail($user_id);
+        $this->authorize('writeTodo', $user);
         $user->todos()->where('checked', 1)->delete();
 
         return response('success');

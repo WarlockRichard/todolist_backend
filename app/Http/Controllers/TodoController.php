@@ -45,6 +45,7 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
+        $this->authorize('modify', $todo);
         $data = $request->validate([
             'text' => 'required',
             'checked' => 'required|boolean'
@@ -64,6 +65,7 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
+        $this->authorize('modify', $todo);
         $todo->delete();
         return response('success');
     }
